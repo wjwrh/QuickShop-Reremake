@@ -33,8 +33,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.util.MsgUtil;
-import org.maxgamer.quickshop.util.UpdateInfomation;
-import org.maxgamer.quickshop.util.Updater;
 
 public class UpdateWatcher implements Listener {
   public static boolean hasNewUpdate = false;
