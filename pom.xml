@@ -114,10 +114,6 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>central-repo</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
             <id>reserve-repo</id>
             <url>https://dl.bintray.com/theneweconomy/java/</url>
         </repository>
@@ -349,12 +345,6 @@
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.5.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>2.14.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
