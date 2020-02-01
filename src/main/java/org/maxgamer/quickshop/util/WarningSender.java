@@ -48,7 +48,7 @@ public class WarningSender {
    * @param text The text you want send/
    * @return Success sent, if it is in a cool-down, it will return false
    */
-  public boolean sendWarn(String text) {
+  public boolean sendWarn(@NotNull String text) {
     if (System.currentTimeMillis() - lastSend > cooldown) {
       plugin.getLogger().warning(text);
       this.lastSend = System.currentTimeMillis();
