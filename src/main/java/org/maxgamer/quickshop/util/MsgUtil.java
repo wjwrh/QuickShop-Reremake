@@ -19,8 +19,10 @@
 
 package org.maxgamer.quickshop.util;
 
+import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.sql.ResultSet;
@@ -59,9 +61,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.maxgamer.quickshop.file.IFile;
-import org.maxgamer.quickshop.file.JSONFile;
 import org.maxgamer.quickshop.QuickShop;
+import org.maxgamer.quickshop.file.IFile;
 import org.maxgamer.quickshop.shop.Shop;
 
 @SuppressWarnings("WeakerAccess")
@@ -73,7 +74,7 @@ public class MsgUtil {
   private static YamlConfiguration enchi18n;
   private static boolean inited;
   private static YamlConfiguration itemi18n;
-  private static IFile messagei18n;
+  private static JsonConfiguration messagei18n;
   private static HashMap<UUID, LinkedList<String>> player_messages = new HashMap<>();
   private static QuickShop plugin = QuickShop.instance;
   private static YamlConfiguration potioni18n;
@@ -284,8 +285,7 @@ public class MsgUtil {
   public static void loadGameLanguage(@NotNull String languageCode) {
     gameLanguage = new GameLanguage(languageCode);
   }
-
-  public static void loadCfgMessages() throws InvalidConfigurationException {
+  public static void loadCfgMessages() throws InvalidConfigurationException, IOException {
     /* Check & Load & Create default messages.yml */
     // Use try block to hook any possible exception, make sure not effect our cfgMessnages code.
     String languageCode = plugin.getConfig().getString("language", "en");
@@ -293,31 +293,27 @@ public class MsgUtil {
 
     loadGameLanguage(plugin.getConfig().getString("game-language", "default"));
     // Init nJson
-    IFile nJson;
-    if (plugin.getResource("messages/" + languageCode + ".json") == null) {
-      nJson =
-          new JSONFile(
-              plugin, new File(plugin.getDataFolder(), "messages.json"), "messages/en.json", true);
-    } else {
-      nJson =
-          new JSONFile(
-              plugin,
-              new File(plugin.getDataFolder(), "messages.json"),
-              "messages/" + languageCode + ".json",
-              true);
+    JsonConfiguration cfg;
+    File cfgFile = new File(plugin.getDataFolder(),"messages.json");
+    if(!cfgFile.exists()){
+      InputStream builtInResource = plugin.getResource("messages/" + languageCode + ".json");
+      if(builtInResource != null){
+        new Copied(cfgFile).accept(builtInResource);
+      }else{
+        //noinspection ConstantConditions
+        new Copied(cfgFile).accept(plugin.getResource("messages/" + "en" + ".json"));
+      }
     }
-
-    nJson.create();
-
+    cfg = JsonConfiguration.loadConfiguration(cfgFile);
     File oldMsgFile = new File(plugin.getDataFolder(), "messages.yml");
     if (oldMsgFile.exists()) { // Old messages file convert.
       plugin.getLogger().info("Converting the old format message.yml to message.json...");
       plugin.getLanguage().saveFile(languageCode, "messages", "messages.json");
       YamlConfiguration oldMsgI18n = YamlConfiguration.loadConfiguration(oldMsgFile);
       for (String key : oldMsgI18n.getKeys(true)) {
-        oldMsgI18n.get(key);
+        cfg.set(key,oldMsgI18n.get(key));
       }
-      nJson.save();
+      cfg.save(cfgFile);
       try {
         Files.move(
             oldMsgFile.toPath(), new File(plugin.getDataFolder(), "messages.yml.bak").toPath());
@@ -327,15 +323,8 @@ public class MsgUtil {
         oldMsgFile.delete();
       }
       plugin.getLogger().info("Successfully converted, Continue loading...");
-    } else {
-      Util.debugLog("Loading language file from exist file...");
-      if (!new File(plugin.getDataFolder(), "messages.json").exists()) {
-        plugin.getLanguage().saveFile(languageCode, "messages", "messages.json");
-        nJson.loadFromString(
-            Util.readToString(new File(plugin.getDataFolder(), "messages.json").getAbsolutePath()));
-      }
     }
-    messagei18n = nJson;
+    messagei18n = cfg;
     /* Set default language vesion and update messages.yml */
     if (messagei18n.getInt("language-version") == 0) {
       messagei18n.set("language-version", 1);
