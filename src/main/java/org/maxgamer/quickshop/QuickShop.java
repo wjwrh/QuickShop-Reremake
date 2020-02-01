@@ -87,16 +87,16 @@ import org.maxgamer.quickshop.util.FunnyEasterEgg;
 import org.maxgamer.quickshop.util.IncompatibleChecker;
 import org.maxgamer.quickshop.util.IntegrationHelper;
 import org.maxgamer.quickshop.util.ItemMatcher;
-import org.maxgamer.quickshop.util.logger.QuickShopLogger;
 import org.maxgamer.quickshop.util.MsgUtil;
 import org.maxgamer.quickshop.util.PermissionChecker;
 import org.maxgamer.quickshop.util.ReflectFactory;
 import org.maxgamer.quickshop.util.SentryErrorReporter;
+import org.maxgamer.quickshop.util.Timer;
+import org.maxgamer.quickshop.util.Util;
+import org.maxgamer.quickshop.util.logger.QuickShopLogger;
 import org.maxgamer.quickshop.util.serverforkwrapper.BukkitAPIWrapper;
 import org.maxgamer.quickshop.util.serverforkwrapper.PaperWrapper;
 import org.maxgamer.quickshop.util.serverforkwrapper.SpigotWrapper;
-import org.maxgamer.quickshop.util.Timer;
-import org.maxgamer.quickshop.util.Util;
 import org.maxgamer.quickshop.watcher.DisplayAutoDespawnWatcher;
 import org.maxgamer.quickshop.watcher.DisplayDupeRemoverWatcher;
 import org.maxgamer.quickshop.watcher.DisplayWatcher;
@@ -382,9 +382,9 @@ public class QuickShop extends JavaPlugin {
     this.integrationHelper.callIntegrationsLoad(IntegrateStage.onLoadBegin);
     if (getConfig().getBoolean("integration.worldguard.enable")) {
       Plugin wg = Bukkit.getPluginManager().getPlugin("WorldGuard");
-      Util.debugLogHeavy("Check WG plugin...");
+      Util.debugLog("Check WG plugin...");
       if (wg != null) {
-        Util.debugLogHeavy("Loading WG modules.");
+        Util.debugLog("Loading WG modules.");
         this.integrationHelper.register(
             new WorldGuardIntegration(this)); // WG require register flags when onLoad called.
       }
