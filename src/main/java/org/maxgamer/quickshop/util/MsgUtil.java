@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.SneakyThrows;
@@ -62,7 +61,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.QuickShop;
-import org.maxgamer.quickshop.file.IFile;
 import org.maxgamer.quickshop.shop.Shop;
 
 @SuppressWarnings("WeakerAccess")
@@ -211,8 +209,8 @@ public class MsgUtil {
    */
   public static String getMessage(
       @NotNull String loc, @Nullable CommandSender player, @NotNull String... args) {
-    Optional<String> raw = messagei18n.getString(loc);
-    if (!raw.isPresent()) {
+    String raw = messagei18n.getString(loc);
+    if (raw == null) {
       Util.debugLog(
           "ERR: MsgUtil cannot find the the phrase at "
               + loc
@@ -221,7 +219,7 @@ public class MsgUtil {
 
       return invaildMsg + ": " + loc;
     }
-    String filled = fillArgs(raw.get(), args);
+    String filled = fillArgs(raw, args);
     if (player instanceof OfflinePlayer) {
       if (plugin.getPlaceHolderAPI() != null && plugin.getPlaceHolderAPI().isEnabled()) {
         try {
@@ -250,11 +248,11 @@ public class MsgUtil {
    */
   public static String getMessageOfflinePlayer(
       @NotNull String loc, @Nullable OfflinePlayer player, @NotNull String... args) {
-    Optional<String> raw = messagei18n.getString(loc);
-    if (!raw.isPresent()) {
+    String raw = messagei18n.getString(loc);
+    if (raw == null) {
       return invaildMsg + ": " + loc;
     }
-    String filled = fillArgs(raw.get(), args);
+    String filled = fillArgs(raw, args);
     if (player != null) {
       if (plugin.getPlaceHolderAPI() != null && plugin.getPlaceHolderAPI().isEnabled()) {
         filled = PlaceholderAPI.setPlaceholders(player, filled);
