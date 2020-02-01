@@ -4,7 +4,8 @@ import org.jetbrains.annotations.Nullable;
 
 public interface UpdaterWrapper {
   boolean executeCheck();
-  @Nullable String getVersion();
-  @Nullable String getDescription();
-  @Nullable String getDownloadUrl();
+  @Nullable VersionScheme getVersion();
+  @Nullable int getDownloads();
+  @Nullable double getRating();
+  @Nullable long getReleaseDate();
 }

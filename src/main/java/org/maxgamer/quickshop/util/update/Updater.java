@@ -3,6 +3,7 @@ package org.maxgamer.quickshop.util.update;
 import java.io.File;
 import lombok.SneakyThrows;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.util.Util;
 import org.maxgamer.quickshop.util.update.wrappers.SpigotMCWrapper;
@@ -12,7 +13,7 @@ public class Updater {
   private File updateDatFile;
   private YamlConfiguration config;
 
-  private String version;
+  private VersionScheme version;
   @SneakyThrows
   public Updater(QuickShop plugin){
     this.plugin = plugin;
@@ -40,10 +41,48 @@ public class Updater {
     this.version = wrapper.getVersion();
   }
   public boolean hasUpdate(){
-    return this.version != null && !this.version.trim().isEmpty() &&!this.version.equals(plugin.getDescription().getVersion());
+    if(this.version == null){
+      return false;
+    }
+    VersionScheme pluginVer = readVersionString(plugin.getDescription().getVersion());
+    if(version.getMajor() > pluginVer.getMajor()){
+      return true;
+    }
+    if(version.getMinor() > pluginVer.getMinor()){
+      return true;
+    }
+    return version.getPatch() > pluginVer.getPatch();
   }
 
-  public String getVersion() {
+  public VersionScheme getVersion() {
     return this.version;
+  }
+
+  public static VersionScheme readVersionString(@NotNull String versionStr){
+    String[] explode = versionStr.split(" ");
+    if(explode.length == 0){
+      throw new IllegalArgumentException("The version number cannot be read: "+versionStr+" !");
+    }
+    String[] versionGroup = explode[0].split("\\.");
+    if(versionGroup.length < 2){
+      throw new IllegalArgumentException("The version number cannot be read: "+versionStr+" !");
+    }
+    VersionScheme.VersionSchemeBuilder builder = VersionScheme.builder();
+    builder = builder.major(Integer.parseInt(versionGroup[0])).minor(Integer.parseInt(versionGroup[1]));
+    if(versionGroup.length > 2){
+      builder = builder.patch(Integer.parseInt(versionGroup[2]));
+    }
+    if(explode.length > 1){ //Meme detected!!!
+      // Set desc
+      StringBuilder descBuilder = new StringBuilder();
+      for (int i = 0; i < explode.length; i++) {
+        if(i == 0){
+          continue;
+        }
+        descBuilder.append(explode[i]).append(" ");
+      }
+      builder = builder.desc(descBuilder.toString().trim());
+    }
+    return builder.build();
   }
 }
