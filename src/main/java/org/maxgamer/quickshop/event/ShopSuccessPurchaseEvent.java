@@ -28,7 +28,7 @@ import org.maxgamer.quickshop.shop.Shop;
 public class ShopSuccessPurchaseEvent extends QSEvent implements Cancellable {
 
   @Getter @NotNull public final Shop shop;
-  @Getter private final int amount;
+  @Getter private final int stacks;
   @Getter @NotNull private final Player player;
   @Getter private final double tax;
 
@@ -43,15 +43,15 @@ public class ShopSuccessPurchaseEvent extends QSEvent implements Cancellable {
    *
    * @param shop The shop bought from
    * @param player The player buying
-   * @param amount The amount they're buying
+   * @param stacks The amount they're buying
    * @param tax The tax in this purchase
    * @param total The money in this purchase
    */
   public ShopSuccessPurchaseEvent(
-      @NotNull Shop shop, @NotNull Player player, int amount, double total, double tax) {
+      @NotNull Shop shop, @NotNull Player player, int stacks, double total, double tax) {
     this.shop = shop;
     this.player = player;
-    this.amount = amount;
+    this.stacks = stacks;
     this.tax = tax;
     this.total = total;
   }

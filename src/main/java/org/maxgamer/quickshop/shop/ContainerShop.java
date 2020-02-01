@@ -45,6 +45,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.event.ShopClickEvent;
 import org.maxgamer.quickshop.event.ShopDeleteEvent;
 import org.maxgamer.quickshop.event.ShopLoadEvent;
@@ -52,13 +53,12 @@ import org.maxgamer.quickshop.event.ShopModeratorChangedEvent;
 import org.maxgamer.quickshop.event.ShopPriceChangeEvent;
 import org.maxgamer.quickshop.event.ShopUnloadEvent;
 import org.maxgamer.quickshop.event.ShopUpdateEvent;
-import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.util.MsgUtil;
 import org.maxgamer.quickshop.util.Util;
 
 /** ChestShop core */
 @EqualsAndHashCode
-public class ContainerShop implements Shop {
+public class ContainerShop implements Shop, Stackable {
   @NotNull private final ItemStack item;
   @NotNull private final Location location;
   @Nullable private DisplayItem displayItem;
@@ -68,6 +68,7 @@ public class ContainerShop implements Shop {
   private double price;
   private ShopType shopType;
   private boolean unlimited;
+  private int stacks = 1;
 
   private ContainerShop(@NotNull ContainerShop s) {
     this.displayItem = s.displayItem;
@@ -79,6 +80,7 @@ public class ContainerShop implements Shop {
     this.moderator = s.moderator;
     this.price = s.price;
     this.isLoaded = s.isLoaded;
+    this.stacks = s.stacks;
   }
 
   /**
@@ -96,6 +98,7 @@ public class ContainerShop implements Shop {
       @NotNull Location location,
       double price,
       @NotNull ItemStack item,
+      int stacks,
       @NotNull ShopModerator moderator,
       boolean unlimited,
       @NotNull ShopType type) {
@@ -107,6 +110,7 @@ public class ContainerShop implements Shop {
     this.item.setAmount(1);
     this.shopType = type;
     this.unlimited = unlimited;
+    this.stacks = stacks;
 
     if (plugin.isDisplay()) {
       switch (DisplayItem.getNowUsing()) {
@@ -143,6 +147,7 @@ public class ContainerShop implements Shop {
     if (this.unlimited) {
       return;
     }
+    amount = amount * stacks;
     Inventory inv = this.getInventory();
     int remains = amount;
     while (remains > 0) {
@@ -310,6 +315,7 @@ public class ContainerShop implements Shop {
     if (amount1 < 0) {
       this.sell(p, -amount1);
     }
+    amount1 = amount1 * stacks;
     if (this.isUnlimited()) {
       ItemStack[] contents = p.getInventory().getContents();
       for (int i = 0; amount1 > 0 && i < contents.length; i++) {
@@ -430,7 +436,7 @@ public class ContainerShop implements Shop {
     if (!plugin.isDisplay() || !this.isLoaded) { // FIXME: Reinit scheduler on reloading config
       return;
     }
-    
+
     if (this.displayItem == null) {
       Util.debugLog("Warning: DisplayItem is null, this shouldn't happend...");
       Util.debugLog(
@@ -442,7 +448,7 @@ public class ContainerShop implements Shop {
               + Thread.currentThread().getStackTrace()[2].getLineNumber());
       return;
     }
-    
+
     if (!this.displayItem.isSpawned()) {
       /* Not spawned yet. */
       Util.debugLog("Target item not spawned, spawning...");
@@ -452,13 +458,13 @@ public class ContainerShop implements Shop {
       if (this.displayItem.checkDisplayNeedRegen()) {
         this.displayItem.fixDisplayNeedRegen();
       } else {
-          /* If display was regened, we didn't need check it moved, performance! */
+        /* If display was regened, we didn't need check it moved, performance! */
         if (this.displayItem.checkDisplayIsMoved()) {
           this.displayItem.fixDisplayMoved();
         }
       }
     }
-    
+
     /* Dupe is always need check, if enabled display */
     this.displayItem.removeDupe();
     // plugin.getDisplayDupeRemoverWatcher().add(this.displayItem);
@@ -483,7 +489,7 @@ public class ContainerShop implements Shop {
       return;
     }
     Inventory inv = this.getInventory();
-    int remains = amount;
+    int remains = amount * stacks;
     while (remains > 0) {
       int stackSize = Math.min(remains, item.getMaxStackSize());
       item.setAmount(stackSize);
@@ -522,6 +528,7 @@ public class ContainerShop implements Shop {
     if (amount < 0) {
       this.buy(p, -amount);
     }
+    amount = amount * stacks;
     // Items to drop on floor
     ArrayList<ItemStack> floor = new ArrayList<>(5);
     Inventory pInv = p.getInventory();
@@ -977,4 +984,15 @@ public class ContainerShop implements Shop {
   public boolean isLoaded() {
     return this.isLoaded;
   }
+
+  @Override
+  public int getStackAmount() {
+    return this.stacks;
+  }
+
+  @Override
+  public void setStackAmount(int amount) {
+    this.stacks = amount;
+  }
+
 }

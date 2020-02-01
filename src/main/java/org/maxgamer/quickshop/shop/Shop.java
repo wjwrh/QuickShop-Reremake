@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.maxgamer.quickshop.shop.shopstack.ShopStack;
 
 public interface Shop {
   /**
@@ -155,7 +156,7 @@ public interface Shop {
    * @return The shop's ItemStack
    */
   @NotNull
-  ItemStack getItem();
+  ShopStack getShopStack();
 
   /**
    * Set texts on shop's sign

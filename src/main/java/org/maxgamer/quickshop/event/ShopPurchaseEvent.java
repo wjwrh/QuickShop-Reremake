@@ -31,7 +31,7 @@ public class ShopPurchaseEvent extends QSEvent implements Cancellable {
 
   @Getter @NotNull private final Player player;
 
-  @Getter private final int amount;
+  @Getter private final int stacks;
 
   private boolean cancelled;
 
@@ -41,12 +41,12 @@ public class ShopPurchaseEvent extends QSEvent implements Cancellable {
    *
    * @param shop The shop bought from
    * @param player The player buying
-   * @param amount The amount they're buying
+   * @param stacks The amount they're buying
    */
-  public ShopPurchaseEvent(@NotNull Shop shop, @NotNull Player player, int amount) {
+  public ShopPurchaseEvent(@NotNull Shop shop, @NotNull Player player, int stacks) {
     this.shop = shop;
     this.player = player;
-    this.amount = amount;
+    this.stacks = stacks;
   }
 
   @Override
