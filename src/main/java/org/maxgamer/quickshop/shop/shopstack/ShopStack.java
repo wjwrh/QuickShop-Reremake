@@ -19,4 +19,5 @@ public interface ShopStack {
     TransactionResult remove(int amount, @Nullable Inventory inventory, @Nullable OfflinePlayer player);
     int getRemaining(@Nullable Inventory inventory, @Nullable OfflinePlayer player);
     int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player);
+    boolean matches(@NotNull Object object);
 }

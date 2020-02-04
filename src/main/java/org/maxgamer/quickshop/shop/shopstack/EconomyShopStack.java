@@ -1,5 +1,7 @@
 package org.maxgamer.quickshop.shop.shopstack;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.commons.lang.Validate;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -9,16 +11,12 @@ import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.economy.Economy;
 import org.maxgamer.quickshop.shop.Shop;
 import org.maxgamer.quickshop.util.Util;
-
+@Getter
+@AllArgsConstructor
 public class EconomyShopStack implements ShopStack {
-  Economy economy;
-  double moneyPerStack;
-  boolean allowLoan;
-  public EconomyShopStack (@NotNull Economy economy,double moneyPerStack, boolean allowLoan){
-    this.economy = economy;
-    this.moneyPerStack = moneyPerStack;
-    this.allowLoan = allowLoan;
-  }
+  private Economy economy;
+  private double moneyPerStack;
+  private boolean allowLoan;
   @Override
   public TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int amount) {
     double total = moneyPerStack * amount;
@@ -75,5 +73,22 @@ public class EconomyShopStack implements ShopStack {
   @Override
   public int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player) {
     return Integer.MAX_VALUE; //FIXME:Player wallet is unlimited, if found some plugin limit player money, this method need rewrite
+  }
+
+  @Override
+  public boolean matches(@NotNull Object obj) {
+    if(obj instanceof Double){
+      return (double)obj ==  this.moneyPerStack;
+    }
+    if(obj instanceof Integer){
+      return (int)obj ==  this.moneyPerStack;
+    }
+    if(obj instanceof Float){
+      return (float)obj ==  this.moneyPerStack;
+    }
+    if(obj instanceof EconomyShopStack){
+      return ((EconomyShopStack) obj).getMoneyPerStack() == this.moneyPerStack;
+    }
+    return false;
   }
 }

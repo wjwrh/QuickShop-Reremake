@@ -1,6 +1,7 @@
 package org.maxgamer.quickshop.shop.shopstack;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.commons.lang.Validate;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -8,13 +9,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.shop.Shop;
 import org.maxgamer.quickshop.util.Util;
 
 @AllArgsConstructor
+@Getter
 public class ItemShopStack implements ShopStack {
-  ItemStack item;
-  int itemsPerStack;
+  private ItemStack item;
+  private int itemsPerStack;
+  private QuickShop plugin;
 
   @Override
   public TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int amount) {
@@ -75,5 +79,19 @@ public class ItemShopStack implements ShopStack {
   public int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player) {
     Validate.isTrue(inventory!=null, "For ItemShopStack type, Inventory can't be null");
     return Util.divByNum(Util.countSpace(inventory,this.item),this.itemsPerStack);
+  }
+
+  @Override
+  public boolean matches(@Nullable Object obj) {
+    if(obj instanceof ItemShopStack){
+      if(((ItemShopStack) obj).getItemsPerStack() != this.itemsPerStack){
+        return false;
+      }
+      return plugin.getItemMatcher().matches(this.item,((ItemShopStack) obj).getItem());
+    }
+    if(obj instanceof ItemStack){
+      return plugin.getItemMatcher().matches(this.item,(ItemStack)obj);
+    }
+    return false;
   }
 }

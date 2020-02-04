@@ -59,8 +59,7 @@ import org.maxgamer.quickshop.util.Util;
 
 /** ChestShop core */
 @EqualsAndHashCode
-public class ContainerShop implements Shop, Stackable {
-  @NotNull private final ItemStack item;
+public class ContainerShop implements Shop {
   @NotNull private final Location location;
   @Nullable private DisplayItem displayItem;
   @EqualsAndHashCode.Exclude private boolean isLoaded = false;
@@ -69,21 +68,18 @@ public class ContainerShop implements Shop, Stackable {
   private double price;
   private ShopType shopType;
   private boolean unlimited;
-  private int stacks = 1;
   private ShopStack offeringStack;
   private ShopStack gettingStack;
 
   private ContainerShop(@NotNull ContainerShop s) {
     this.displayItem = s.displayItem;
     this.shopType = s.shopType;
-    this.item = s.item;
     this.location = s.location;
     this.plugin = s.plugin;
     this.unlimited = s.unlimited;
     this.moderator = s.moderator;
     this.price = s.price;
     this.isLoaded = s.isLoaded;
-    this.stacks = s.stacks;
     this.offeringStack = s.offeringStack;
     this.gettingStack = s.gettingStack;
   }
@@ -93,16 +89,16 @@ public class ContainerShop implements Shop, Stackable {
    *
    * @param location The location of the chest block
    * @param price The cost per item
-   * @param item The itemstack with the properties we want. This is .cloned, no need to worry about
-   *     references
    * @param moderator The modertators
    * @param type The shop type
    * @param unlimited The unlimited
+   * @param offeringStack Get the shop offering stack
+   * @param gettingStack Get the shop wanted stack
+   * @param stacks Sell
    */
   public ContainerShop(
       @NotNull Location location,
       double price,
-      @NotNull ItemStack item,
       int stacks,
       @NotNull ShopModerator moderator,
       boolean unlimited,
@@ -112,12 +108,9 @@ public class ContainerShop implements Shop, Stackable {
     this.location = location;
     this.price = price;
     this.moderator = moderator;
-    this.item = new ItemStack(item);
     this.plugin = QuickShop.instance;
-    this.item.setAmount(1);
     this.shopType = type;
     this.unlimited = unlimited;
-    this.stacks = stacks;
     this.gettingStack = gettingStack;
     this.offeringStack = offeringStack;
 
@@ -170,7 +163,7 @@ public class ContainerShop implements Shop, Stackable {
     if (this.unlimited) {
       return -1;
     }
-    return Util.countItems(this.getInventory(), this.getItem());
+    return this.offeringStack.getRemaining(getInventory(),null);
   }
 
   /**
@@ -183,7 +176,7 @@ public class ContainerShop implements Shop, Stackable {
     if (this.unlimited) {
       return -1;
     }
-    return Util.countSpace(this.getInventory(), this.getItem());
+    return this.offeringStack.getFreeSpace(getInventory(),null);
   }
 
   /**
