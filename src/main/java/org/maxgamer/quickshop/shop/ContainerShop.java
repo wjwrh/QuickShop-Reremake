@@ -53,6 +53,7 @@ import org.maxgamer.quickshop.event.ShopModeratorChangedEvent;
 import org.maxgamer.quickshop.event.ShopPriceChangeEvent;
 import org.maxgamer.quickshop.event.ShopUnloadEvent;
 import org.maxgamer.quickshop.event.ShopUpdateEvent;
+import org.maxgamer.quickshop.shop.shopstack.ShopStack;
 import org.maxgamer.quickshop.util.MsgUtil;
 import org.maxgamer.quickshop.util.Util;
 
@@ -266,6 +267,21 @@ public class ContainerShop implements Shop, Stackable {
   @Override
   public short getDurability() {
     return (short) ((Damageable) this.item.getItemMeta()).getDamage();
+  }
+
+  @Override
+  public @NotNull ShopStack getOfferingShopStack() {
+    return null;
+  }
+
+  @Override
+  public @NotNull ShopStack getGettingShopStack() {
+    return null;
+  }
+
+  @Override
+  public @NotNull ShopStack getShopStack() {
+    return this.s
   }
 
   /** @return The name of the player who owns the shop. */

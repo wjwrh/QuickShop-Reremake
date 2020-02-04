@@ -156,7 +156,15 @@ public interface Shop {
    * @return The shop's ItemStack
    */
   @NotNull
-  ShopStack getShopStack();
+  ShopStack getOfferingShopStack();
+
+  /**
+   * Get shop item's ItemStack
+   *
+   * @return The shop's ItemStack
+   */
+  @NotNull
+  ShopStack getGettingShopStack();
 
   /**
    * Set texts on shop's sign

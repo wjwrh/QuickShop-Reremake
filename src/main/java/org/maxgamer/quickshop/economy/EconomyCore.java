@@ -73,4 +73,5 @@ public interface EconomyCore {
    * @return True if this economy will work, false if it will not.
    */
   boolean isValid();
+
 }
