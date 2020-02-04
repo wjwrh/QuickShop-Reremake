@@ -70,6 +70,8 @@ public class ContainerShop implements Shop, Stackable {
   private ShopType shopType;
   private boolean unlimited;
   private int stacks = 1;
+  private ShopStack offeringStack;
+  private ShopStack gettingStack;
 
   private ContainerShop(@NotNull ContainerShop s) {
     this.displayItem = s.displayItem;
@@ -82,6 +84,8 @@ public class ContainerShop implements Shop, Stackable {
     this.price = s.price;
     this.isLoaded = s.isLoaded;
     this.stacks = s.stacks;
+    this.offeringStack = s.offeringStack;
+    this.gettingStack = s.gettingStack;
   }
 
   /**
@@ -102,7 +106,9 @@ public class ContainerShop implements Shop, Stackable {
       int stacks,
       @NotNull ShopModerator moderator,
       boolean unlimited,
-      @NotNull ShopType type) {
+      @NotNull ShopType type,
+      @NotNull ShopStack gettingStack,
+      @NotNull ShopStack offeringStack) {
     this.location = location;
     this.price = price;
     this.moderator = moderator;
@@ -112,6 +118,8 @@ public class ContainerShop implements Shop, Stackable {
     this.shopType = type;
     this.unlimited = unlimited;
     this.stacks = stacks;
+    this.gettingStack = gettingStack;
+    this.offeringStack = offeringStack;
 
     if (plugin.isDisplay()) {
       switch (DisplayItem.getNowUsing()) {
@@ -148,15 +156,7 @@ public class ContainerShop implements Shop, Stackable {
     if (this.unlimited) {
       return;
     }
-    amount = amount * stacks;
-    Inventory inv = this.getInventory();
-    int remains = amount;
-    while (remains > 0) {
-      int stackSize = Math.min(remains, item.getMaxStackSize());
-      item.setAmount(stackSize);
-      Objects.requireNonNull(inv).addItem(item);
-      remains -= stackSize;
-    }
+    this.gettingStack.add(amount,this.getInventory(),null);
     this.setSignText();
   }
 
@@ -278,12 +278,6 @@ public class ContainerShop implements Shop, Stackable {
   public @NotNull ShopStack getGettingShopStack() {
     return null;
   }
-
-  @Override
-  public @NotNull ShopStack getShopStack() {
-    return this.s
-  }
-
   /** @return The name of the player who owns the shop. */
   @Override
   public @NotNull UUID getOwner() {

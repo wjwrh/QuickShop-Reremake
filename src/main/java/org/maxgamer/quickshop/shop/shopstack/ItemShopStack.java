@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.shop.Shop;
+import org.maxgamer.quickshop.util.Util;
 
 @AllArgsConstructor
 public class ItemShopStack implements ShopStack {
@@ -62,5 +63,17 @@ public class ItemShopStack implements ShopStack {
       remains -= stackSize;
     }
     return TransactionResult.SUCCESS;
+  }
+
+  @Override
+  public int getRemaining(@Nullable Inventory inventory, @Nullable OfflinePlayer player) {
+    Validate.isTrue(inventory!=null, "For ItemShopStack type, Inventory can't be null");
+    return Util.divByNum(Util.countItems(inventory,this.item),this.itemsPerStack);
+  }
+
+  @Override
+  public int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player) {
+    Validate.isTrue(inventory!=null, "For ItemShopStack type, Inventory can't be null");
+    return Util.divByNum(Util.countSpace(inventory,this.item),this.itemsPerStack);
   }
 }

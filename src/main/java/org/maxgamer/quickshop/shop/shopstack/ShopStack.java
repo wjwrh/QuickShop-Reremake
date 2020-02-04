@@ -17,4 +17,6 @@ public interface ShopStack {
     TransactionResult sell(@NotNull Player p, @NotNull Shop shop, int amount);
     TransactionResult add(int amount, @Nullable Inventory inventory, @Nullable OfflinePlayer player);
     TransactionResult remove(int amount, @Nullable Inventory inventory, @Nullable OfflinePlayer player);
+    int getRemaining(@Nullable Inventory inventory, @Nullable OfflinePlayer player);
+    int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player);
 }

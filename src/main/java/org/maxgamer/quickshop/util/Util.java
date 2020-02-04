@@ -1400,4 +1400,20 @@ public class Util {
     }
     return cache;
   }
+
+  /**
+   * Get a number can be div by offer num how many times.
+   * @param source The source number
+   * @param offer The number to div source number
+   * @return The times can be div
+   */
+  public static int divByNum(double source, double offer){
+    int count=0;
+    while(source%offer==0)
+    {
+      count++;
+      source=source/5;
+    }
+    return count;
+  }
 }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.economy.Economy;
 import org.maxgamer.quickshop.shop.Shop;
+import org.maxgamer.quickshop.util.Util;
 
 public class EconomyShopStack implements ShopStack {
   Economy economy;
@@ -32,7 +33,6 @@ public class EconomyShopStack implements ShopStack {
       return TransactionResult.INTERNAL_ERROR;
     }
     return TransactionResult.SUCCESS;
-
   }
 
   @Override
@@ -63,5 +63,17 @@ public class EconomyShopStack implements ShopStack {
     Validate.isTrue(player!=null,"OfflinePlayer cannot be null in EconomyShopStack");
     economy.withdraw(player.getUniqueId(),amount*moneyPerStack);
     return null;
+  }
+
+  @Override
+  public int getRemaining(@Nullable Inventory inventory, @Nullable OfflinePlayer player) {
+    Validate.isTrue(player!=null,"OfflinePlayer cannot be null in EconomyShopStack");
+    double hasMoney = economy.getBalance(player.getUniqueId());
+    return Util.divByNum(hasMoney,this.moneyPerStack);
+  }
+
+  @Override
+  public int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player) {
+    return Integer.MAX_VALUE; //FIXME:Player wallet is unlimited, if found some plugin limit player money, this method need rewrite
   }
 }
