@@ -19,6 +19,7 @@
 
 package org.maxgamer.quickshop.util;
 
+import fr.neatmonster.nocheatplus.checks.CheckType;
 import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
@@ -42,7 +43,8 @@ public class Compatibility {
           "Calling NoCheatPlus ignore "
               + player.getName()
               + " cheats detection until we finished permission checks.");
-      NCPExemptionManager.exemptPermanently(player);
+      NCPExemptionManager.exemptPermanently(player, CheckType.BLOCKBREAK);
+      NCPExemptionManager.exemptPermanently(player, CheckType.BLOCKINTERACT);
     }
   }
 
@@ -50,7 +52,8 @@ public class Compatibility {
     if (Bukkit.getPluginManager().isPluginEnabled("NoCheatPlus")) {
       Util.debugLog(
           "Calling NoCheatPlus continue follow " + player.getName() + " cheats detection.");
-      NCPExemptionManager.unexempt(player);
+      NCPExemptionManager.unexempt(player, CheckType.BLOCKBREAK);
+      NCPExemptionManager.unexempt(player, CheckType.BLOCKINTERACT);
     }
   }
 
