@@ -186,7 +186,7 @@ public class ContainerShop implements Shop {
    * @return True if the ItemStack is the same (Excludes amounts)
    */
   @Override
-  public boolean matches(@Nullable ItemStack item) {
+  public boolean  matches(@Nullable ItemStack item) {
     return plugin.getItemMatcher().matches(this.item, item);
   }
 
@@ -201,7 +201,6 @@ public class ContainerShop implements Shop {
   public double getPrice() {
     return this.price;
   }
-
   /**
    * Sets the price of the shop.
    *
@@ -977,7 +976,7 @@ public class ContainerShop implements Shop {
   }
 
   @Override
-  public void setModerator(ShopModerator shopModerator) {
+  public void setModerator(@NotNull ShopModerator shopModerator) {
     this.moderator = shopModerator;
     update();
     Bukkit.getPluginManager().callEvent(new ShopModeratorChangedEvent(this, this.moderator));

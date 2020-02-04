@@ -26,19 +26,19 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.shop.shopstack.ShopStack;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface Shop {
   /**
-   * Add x ItemStack to the shop inventory
+   * Add x ShopStack entity to the shop
    *
-   * @param paramItemStack The ItemStack you want add
-   * @param paramInt How many you want add
+   * @param paramShopStack The ItemStack you want add
+   * @param paramInt How many stacks you want add
    */
-  void add(ItemStack paramItemStack, int paramInt);
+  void add(@NotNull ShopStack paramShopStack, int paramInt);
 
   /**
    * Add new staff to the moderators
@@ -46,7 +46,7 @@ public interface Shop {
    * @param player New staff
    * @return Success
    */
-  boolean addStaff(UUID player);
+  boolean addStaff(@NotNull UUID player);
 
   /**
    * Execute buy action for player with x items.
@@ -54,7 +54,7 @@ public interface Shop {
    * @param paramPlayer Target player
    * @param paramInt How many buyed?
    */
-  void buy(Player paramPlayer, int paramInt);
+  void buy(@NotNull Player paramPlayer, int paramInt);
 
   /** Check the display location, and teleport, respawn if needs. */
   void checkDisplay();
@@ -76,7 +76,7 @@ public interface Shop {
    * @param player Staff
    * @return Success
    */
-  boolean delStaff(UUID player);
+  boolean delStaff(@NotNull UUID player);
 
   /** Delete shop from ram, and database. */
   void delete();
@@ -94,15 +94,16 @@ public interface Shop {
    * @param paramBlock Target block
    * @return isAttached
    */
-  boolean isAttached(Block paramBlock);
+  boolean isAttached(@NotNull Block paramBlock);
 
   /**
-   * Check the target ItemStack is matches with this shop's item.
+   * Check the target ShopStack is matches with this shop's special type.
    *
-   * @param paramItemStack Target ItemStack.
+   * @param shopStack The shopStack you want to match
+   * @param shopStackType The type you want to match
    * @return Matches
    */
-  boolean matches(ItemStack paramItemStack);
+  boolean matches(@NotNull ShopStack shopStack, @NotNull ShopStackType shopStackType);
 
   /** Execute codes when player click the shop will did things */
   void onClick();
@@ -124,10 +125,10 @@ public interface Shop {
   /**
    * Remove x ItemStack from the shop inventory
    *
-   * @param paramItemStack Want removed ItemStack
+   * @param paramShopStack Want removed ItemStack
    * @param paramInt Want remove how many
    */
-  void remove(ItemStack paramItemStack, int paramInt);
+  void remove(@NotNull ShopStack paramShopStack, int paramInt);
 
   /**
    * Execute sell action for player with x items.
@@ -135,20 +136,13 @@ public interface Shop {
    * @param paramPlayer Target player
    * @param paramInt How many sold?
    */
-  void sell(Player paramPlayer, int paramInt);
+  void sell(@NotNull Player paramPlayer, int paramInt);
 
   /** Generate new sign texts on shop's sign. */
   void setSignText();
 
   /** Update shop data to database */
   void update();
-
-  /**
-   * Get shop's item durability, if have.
-   *
-   * @return Shop's item durability
-   */
-  short getDurability();
 
   /**
    * Get shop item's ItemStack
@@ -194,7 +188,7 @@ public interface Shop {
    *
    * @param shopModerator New moderators team you want set
    */
-  void setModerator(ShopModerator shopModerator);
+  void setModerator(@NotNull ShopModerator shopModerator);
 
   /**
    * Get shop's owner UUID
@@ -209,21 +203,7 @@ public interface Shop {
    *
    * @param paramString New owner UUID
    */
-  void setOwner(UUID paramString);
-
-  /**
-   * Get shop's price
-   *
-   * @return Price
-   */
-  double getPrice();
-
-  /**
-   * Set shop's new price
-   *
-   * @param paramDouble New price
-   */
-  void setPrice(double paramDouble);
+  void setOwner(@NotNull UUID paramString);
 
   /**
    * Get shop remaining space.
@@ -253,6 +233,13 @@ public interface Shop {
    * @param paramShopType New shop type
    */
   void setShopType(ShopType paramShopType);
+
+  /**
+   * Set new shop stack for a shop
+   * @param shopStack The shop stack you want to set
+   * @param type The type of shop stack you want to set
+   */
+  void setShopStack(@NotNull ShopStack shopStack, @NotNull ShopStackType type);
 
   /**
    * Get shop signs, may have multi signs
