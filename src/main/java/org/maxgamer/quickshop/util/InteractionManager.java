@@ -2,8 +2,6 @@ package org.maxgamer.quickshop.util;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -12,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class InteractionManager {
   private Map<Class<? extends Event>, Set<InteractionRegisterEntry>> registered = new HashMap<>();
@@ -36,7 +33,7 @@ public class InteractionManager {
   }
   public void fireEvent(@NotNull Event event){
     Set<InteractionRegisterEntry> register = this.registered.getOrDefault(event.getClass(), Collections.emptySet());
-    register.forEach(e-> e.getConsumer().accept(new InteractionCallback(event.getClass(), e.getUniqueID())));
+    register.forEach(e-> e.getConsumer().accept(new InteractionCallback(event, e.getUniqueID())));
   }
 
 }
@@ -50,6 +47,6 @@ class InteractionRegisterEntry{
 @AllArgsConstructor
 @Data
 class InteractionCallback{
-  private @NotNull Class<? extends Event> event;
+  private @NotNull Event event;
   private @NotNull UUID uniqueID;
 }
