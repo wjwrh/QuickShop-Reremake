@@ -42,7 +42,7 @@ public class InteractionManager {
 class InteractionRegisterEntry{
   private @NotNull Class<? extends Event> event;
   private @NotNull UUID uniqueID;
-  private @NotNull Consumer<InteractionCallback> consumer;
+  private @NotNull Consumer<InteractionCallback> consumer; //TODO Timings
 }
 @AllArgsConstructor
 @Data

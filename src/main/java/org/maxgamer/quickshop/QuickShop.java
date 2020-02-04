@@ -86,6 +86,7 @@ import org.maxgamer.quickshop.util.Compatibility;
 import org.maxgamer.quickshop.util.FunnyEasterEgg;
 import org.maxgamer.quickshop.util.IncompatibleChecker;
 import org.maxgamer.quickshop.util.IntegrationHelper;
+import org.maxgamer.quickshop.util.InteractionManager;
 import org.maxgamer.quickshop.util.ItemMatcher;
 import org.maxgamer.quickshop.util.MsgUtil;
 import org.maxgamer.quickshop.util.PermissionChecker;
@@ -202,6 +203,8 @@ public class QuickShop extends JavaPlugin {
   private BukkitAPIWrapper bukkitAPIWrapper;
   private boolean isUtilInited = false;
   private boolean enabledAsyncDisplayDespawn;
+
+  private InteractionManager interactionManager;
 
   /**
    * Returns QS version, this method only exist on QSRR forks If running other QSRR forks,, result
@@ -578,7 +581,7 @@ public class QuickShop extends JavaPlugin {
 
     getLogger().info("Registering Listeners...");
     // Register events
-
+    this.interactionManager = new InteractionManager();
     blockListener = new BlockListener(this);
     playerListener = new PlayerListener(this);
     worldListener = new WorldListener(this);

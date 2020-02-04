@@ -977,13 +977,14 @@ public class MsgUtil {
   }
 
   @SuppressWarnings("UnusedAssignment")
-  private static void updateMessages(int selectedVersion) {
+  private static void updateMessages(int selectedVersion) throws IOException {
     String languageName = plugin.getConfig().getString("language", "en");
-    if (!messagei18n.getString("language-name").isPresent()) {
+    File file =new File(plugin.getDataFolder(), "messages.json");
+    if (messagei18n.getString("language-name")!=null) {
       setAndUpdate("language-name", languageName);
     }
-    if (!messagei18n.getString("language-name").get().equals(languageName)) {
-      new File(plugin.getDataFolder(), "messages.json").delete();
+    if (!Objects.equals(messagei18n.getString("language-name"), languageName)) {
+      file.delete();
       try {
         loadCfgMessages();
       } catch (Exception ignore) {
@@ -1266,7 +1267,7 @@ public class MsgUtil {
       setAndUpdate("language-version", 27);
       selectedVersion = 27;
     }
-    messagei18n.save();
+    messagei18n.save(file);
   }
 
   public static void setAndUpdate(@NotNull String path, @Nullable Object object) {
@@ -1281,7 +1282,7 @@ public class MsgUtil {
     messagei18n.set(path, objFromBuiltIn);
   }
 
-  public static IFile getI18nFile() {
+  public static JsonConfiguration getI18nFile() {
     return messagei18n;
   }
 }
