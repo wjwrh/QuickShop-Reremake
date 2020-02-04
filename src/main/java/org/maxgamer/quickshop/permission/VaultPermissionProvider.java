@@ -27,7 +27,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
-@Deprecated
 public class VaultPermissionProvider implements PermissionProvider {
   private Permission api;
 
@@ -51,6 +50,43 @@ public class VaultPermissionProvider implements PermissionProvider {
   @Override
   public boolean hasPermission(@NotNull CommandSender sender, @NotNull String permission) {
     return api.has(sender, permission);
+  }
+
+  /**
+   * Remove specify permission for player
+   * @param sender Player
+   * @param permission Permission node
+   * @return sucess
+   */
+  public boolean removePermission(@NotNull OfflinePlayer sender, @NotNull String permission){
+    return api.playerRemove(null,sender,permission);
+  }
+  /**
+   * Add specify permission for player
+   * @param sender Player
+   * @param permission Permission node
+   * @return sucess
+   */
+  public boolean addPermission(@NotNull OfflinePlayer sender, @NotNull String permission){
+    return api.playerAdd(null,sender,permission);
+  }
+  /**
+   * Remove specify group access for player
+   * @param sender Player
+   * @param group Group
+   * @return sucess
+   */
+  public boolean removeGroup(@NotNull OfflinePlayer sender, @NotNull String group){
+    return api.playerRemoveGroup(null,sender,group);
+  }
+  /**
+   * Add specify group access for player
+   * @param sender Player
+   * @param group Group
+   * @return sucess
+   */
+  public boolean addGroup(@NotNull OfflinePlayer sender, @NotNull String group){
+    return api.playerAddGroup(null,sender,group);
   }
 
   /**
