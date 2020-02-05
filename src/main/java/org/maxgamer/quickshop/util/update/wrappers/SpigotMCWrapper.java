@@ -35,17 +35,17 @@ public class SpigotMCWrapper implements UpdaterWrapper {
   }
 
   @Override
-  public @Nullable int getDownloads() {
+  public int getDownloads() {
     return 0;
   }
 
   @Override
-  public @Nullable double getRating() {
+  public double getRating() {
     return 0;
   }
 
   @Override
-  public @Nullable long getReleaseDate() {
+  public long getReleaseDate() {
     return 0;
   }
 }

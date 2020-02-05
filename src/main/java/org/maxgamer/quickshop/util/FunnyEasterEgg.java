@@ -35,6 +35,9 @@ public class FunnyEasterEgg {
       if (easterDay()) {
         return this.getEasterRabbit().split("\n");
       }
+      if(currentDate.getMonth() == Calendar.APRIL && currentDate.getDay() == 1){
+        return new String[]{this.getAprilFool()};
+      }
       if (currentDate.getMonth() == Calendar.DECEMBER
           && currentDate.getDay() > 20
           && currentDate.getDay() < 26) {
@@ -175,7 +178,7 @@ public class FunnyEasterEgg {
   private String getAprilFool() {
     String[] fools =
         new String[] {
-          "Warning: System error, formatting server hard disk...",
+          "Warning: System error, formatting server hard disk... Deleting backups... Banned all players... All server data will lose...",
           "---- Minecraft Crash Report ----\n"
               + "// Woo woo woo, this is really danger!.\n"
               + "\n"
