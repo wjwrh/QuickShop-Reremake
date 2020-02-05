@@ -52,6 +52,9 @@ public class OngoingFeeWatcher extends BukkitRunnable {
     boolean ignoreUnlimited = plugin.getConfig().getBoolean("shop.ongoing-fee.ignore-unlimited");
     int perTaskFlow = 0;
     int parallelTasks = 0;
+    //noinspection deprecation
+    UUID uuidOfflinePlayer=Bukkit.getOfflinePlayer(
+        Objects.requireNonNull(plugin.getConfig().getString("tax-account"),"tax")).getUniqueId();
     for (Shop shop : plugin.getShopManager().getAllShops()) {
       if (!shop.isUnlimited() || !ignoreUnlimited) {
         UUID shopOwner = shop.getOwner();
@@ -72,11 +75,9 @@ public class OngoingFeeWatcher extends BukkitRunnable {
             this.removeShop(shop);
           } else {
             try {
-              //noinspection ConstantConditions,deprecation
               plugin
                   .getEconomy()
-                  .deposit(
-                      Bukkit.getOfflinePlayer(plugin.getConfig().getString("tax")).getUniqueId(), cost);
+                  .deposit(uuidOfflinePlayer, cost);
             } catch (Exception ignored) {
             }
           }
@@ -95,7 +96,7 @@ public class OngoingFeeWatcher extends BukkitRunnable {
    * @param shop The shop was remove cause no enough ongoing fee
    */
   public void removeShop(@NotNull Shop shop) {
-    Bukkit.getScheduler().runTask(plugin, (@NotNull Runnable) shop::delete);
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, (@NotNull Runnable) shop::delete);
     MsgUtil.send(
         shop.getOwner(),
         MsgUtil.getMessageOfflinePlayer(
