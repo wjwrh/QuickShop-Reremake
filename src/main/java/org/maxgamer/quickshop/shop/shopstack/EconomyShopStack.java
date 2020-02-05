@@ -1,5 +1,6 @@
 package org.maxgamer.quickshop.shop.shopstack;
 
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang.Validate;
@@ -17,6 +18,7 @@ public class EconomyShopStack implements ShopStack {
   private Economy economy;
   private double moneyPerStack;
   private boolean allowLoan;
+  private static Gson gson = new Gson();
   @Override
   public TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int amount) {
     double total = moneyPerStack * amount;
@@ -106,4 +108,5 @@ public class EconomyShopStack implements ShopStack {
   public String getSignName() {
     return Util.format(this.moneyPerStack);
   }
+
 }

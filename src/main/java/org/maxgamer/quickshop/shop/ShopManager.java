@@ -50,12 +50,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.RegisteredListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.economy.Economy;
 import org.maxgamer.quickshop.event.ShopCreateEvent;
 import org.maxgamer.quickshop.event.ShopPreCreateEvent;
 import org.maxgamer.quickshop.event.ShopPurchaseEvent;
 import org.maxgamer.quickshop.event.ShopSuccessPurchaseEvent;
-import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.util.MsgUtil;
 import org.maxgamer.quickshop.util.Util;
 
@@ -68,7 +68,7 @@ public class ShopManager {
       Sets.newConcurrentHashSet() : Sets.newHashSet();
   private HashMap<UUID, Info> actions = new HashMap<>();
   private QuickShop plugin;
-  private boolean useFastShopSearchAlgorithm = false;
+  private boolean useFastShopSearchAlgorithm;
 
   public ShopManager(@NotNull QuickShop plugin) {
     this.plugin = plugin;
@@ -989,74 +989,70 @@ public class ShopManager {
       return null;
     }
 
-    if (this.useFastShopSearchAlgorithm) {
-      return getShopIncludeAttached_Fast(loc);
-    } else {
-      return getShopIncludeAttached_Classic(loc);
-    }
+    //if (this.useFastShopSearchAlgorithm) {
+    return getShopIncludeAttached_Fast(loc);
+    //} else {
+    //  return getShopIncludeAttached_Classic(loc);
+    //}
   }
+//
+//  public @Nullable Shop getShopIncludeAttached_Classic(@NotNull Location loc) {
+//    @Nullable Shop shop;
+//    // Get location's chunk all shops
+//    @Nullable HashMap<Location, Shop> inChunk = getShops(loc.getChunk());
+//    // Found some shops in this chunk.
+//    if (inChunk != null) {
+//      shop = inChunk.get(loc);
+//      if (shop != null) {
+//        // Okay, shop was founded.
+//        return shop;
+//      }
+//      // Ooops, not founded that shop in this chunk.
+//    }
+//    @Nullable Block secondHalfShop = Util.getSecondHalf(loc.getBlock());
+//    if (secondHalfShop != null) {
+//      inChunk = getShops(secondHalfShop.getChunk());
+//      if (inChunk != null) {
+//        shop = inChunk.get(secondHalfShop.getLocation());
+//        if (shop != null) {
+//          // Okay, shop was founded.
+//          return shop;
+//        }
+//        // Oooops, no any shops matched.
+//      }
+//    }
+//    // If that chunk nothing we founded, we should check it is attached.
+//    @Nullable Block attachedBlock = Util.getAttached(loc.getBlock());
+//    // Check is attached on some block.
+//    if (attachedBlock == null) {
+//      // Nope
+//      Util.debugLog("No attached block.");
+//      return null;
+//    } else {
+//      // Okay we know it on some blocks.
+//      // We need set new location and chunk.
+//      inChunk = getShops(attachedBlock.getChunk());
+//      // Found some shops in this chunk
+//      if (inChunk != null) {
+//        shop = inChunk.get(attachedBlock.getLocation());
+//        if (shop != null) {
+//          // Okay, shop was founded.
+//          return shop;
+//        }
+//        // Oooops, no any shops matched.
+//      }
+//    }
+//
+//    Util.debugLog("Not found shops use the attached util.");
+//
+//    return null;
+//  }
 
-  public @Nullable Shop getShopIncludeAttached_Classic(@Nullable Location loc) {
-    if (loc == null) {
-      Util.debugLog("Location is null.");
-      return null;
-    }
-    @Nullable Shop shop;
-    // Get location's chunk all shops
-    @Nullable HashMap<Location, Shop> inChunk = getShops(loc.getChunk());
-    // Found some shops in this chunk.
-    if (inChunk != null) {
-      shop = inChunk.get(loc);
-      if (shop != null) {
-        // Okay, shop was founded.
-        return shop;
-      }
-      // Ooops, not founded that shop in this chunk.
-    }
-    @Nullable Block secondHalfShop = Util.getSecondHalf(loc.getBlock());
-    if (secondHalfShop != null) {
-      inChunk = getShops(secondHalfShop.getChunk());
-      if (inChunk != null) {
-        shop = inChunk.get(secondHalfShop.getLocation());
-        if (shop != null) {
-          // Okay, shop was founded.
-          return shop;
-        }
-        // Oooops, no any shops matched.
-      }
-    }
-    // If that chunk nothing we founded, we should check it is attached.
-    @Nullable Block attachedBlock = Util.getAttached(loc.getBlock());
-    // Check is attached on some block.
-    if (attachedBlock == null) {
-      // Nope
-      Util.debugLog("No attached block.");
-      return null;
-    } else {
-      // Okay we know it on some blocks.
-      // We need set new location and chunk.
-      inChunk = getShops(attachedBlock.getChunk());
-      // Found some shops in this chunk
-      if (inChunk != null) {
-        shop = inChunk.get(attachedBlock.getLocation());
-        if (shop != null) {
-          // Okay, shop was founded.
-          return shop;
-        }
-        // Oooops, no any shops matched.
-      }
-    }
-
-    Util.debugLog("Not found shops use the attached util.");
-
-    return null;
-  }
-
-  private @Nullable Shop getShopIncludeAttached_Fast(@Nullable Location loc) {
-    if (loc == null) {
-      Util.debugLog("Location is null.");
-      return null;
-    }
+  private @Nullable Shop getShopIncludeAttached_Fast(@NotNull Location loc) {
+//    if (loc == null) {
+//      Util.debugLog("Location is null.");
+//      return null;
+//    }
     @Nullable Shop shop;
     shop = getShop(loc);
     if (shop != null) {

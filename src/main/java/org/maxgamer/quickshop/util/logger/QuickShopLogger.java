@@ -39,6 +39,7 @@ import static org.bukkit.ChatColor.UNDERLINE;
 import static org.bukkit.ChatColor.WHITE;
 import static org.bukkit.ChatColor.YELLOW;
 
+import com.google.common.collect.Maps;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,7 +56,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLogger;
 import org.jetbrains.annotations.Nullable;
-import com.google.common.collect.Maps;
 
 /*
  * Originally take from Mypet which is a awesome project, extends PluginLogger in order to replace
@@ -158,10 +158,7 @@ public class QuickShopLogger extends PluginLogger {
   public void log(LogRecord logRecord) {
     String message = logRecord.getMessage();
 
-    if (message == null) {
-      return;
-    } else {
-
+    if (message != null) {
       if (useLog4j) {
         log4jLogger.log(
             levelMapping.getOrDefault(logRecord.getLevel(), org.apache.logging.log4j.Level.INFO),
