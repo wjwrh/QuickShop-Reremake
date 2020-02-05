@@ -56,7 +56,7 @@ public class OngoingFeeWatcher extends BukkitRunnable {
       if (!shop.isUnlimited() || !ignoreUnlimited) {
         UUID shopOwner = shop.getOwner();
         parallelTasks++;
-        if (parallelTasks > Bukkit.getTPS()[0] * 5) {
+        if (parallelTasks > Util.getTPS() * 5) {
           perTaskFlow++;
           parallelTasks = 0;
         }
