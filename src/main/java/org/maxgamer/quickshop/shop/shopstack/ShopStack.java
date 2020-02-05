@@ -13,11 +13,14 @@ import org.maxgamer.quickshop.shop.Shop;
  */
 public interface ShopStack {
   //Shop buy, shop sell etc.
-    TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int amount);
-    TransactionResult sell(@NotNull Player p, @NotNull Shop shop, int amount);
+    TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int entries);
+    TransactionResult sell(@NotNull Player p, @NotNull Shop shop, int entries);
     TransactionResult add(int amount, @Nullable Inventory inventory, @Nullable OfflinePlayer player);
     TransactionResult remove(int amount, @Nullable Inventory inventory, @Nullable OfflinePlayer player);
     int getRemaining(@Nullable Inventory inventory, @Nullable OfflinePlayer player);
     int getFreeSpace(@Nullable Inventory inventory, @Nullable OfflinePlayer player);
     boolean matches(@NotNull Object object);
+    int getEntriesPerStack();
+    String getDisplayName();
+    String getSignName();
 }

@@ -36,9 +36,9 @@ public interface Shop {
    * Add x ShopStack entity to the shop
    *
    * @param paramShopStack The ItemStack you want add
-   * @param paramInt How many stacks you want add
+   * @param servings How many stacks you want add
    */
-  void add(@NotNull ShopStack paramShopStack, int paramInt);
+  void add(@NotNull ShopStack paramShopStack, int servings);
 
   /**
    * Add new staff to the moderators
@@ -52,9 +52,9 @@ public interface Shop {
    * Execute buy action for player with x items.
    *
    * @param paramPlayer Target player
-   * @param paramInt How many buyed?
+   * @param servings How many buyed?
    */
-  void buy(@NotNull Player paramPlayer, int paramInt);
+  void buy(@NotNull Player paramPlayer, int servings);
 
   /** Check the display location, and teleport, respawn if needs. */
   void checkDisplay();
@@ -232,7 +232,7 @@ public interface Shop {
    *
    * @param paramShopType New shop type
    */
-  void setShopType(ShopType paramShopType);
+  void setShopType(@NotNull ShopType paramShopType);
 
   /**
    * Set new shop stack for a shop

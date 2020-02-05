@@ -21,12 +21,12 @@ public class ItemShopStack implements ShopStack {
   private QuickShop plugin;
 
   @Override
-  public TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int amount) {
+  public TransactionResult buy(@NotNull Player p, @NotNull Shop shop, int entries) {
     return null;
   }
 
   @Override
-  public TransactionResult sell(@NotNull Player p, @NotNull Shop shop, int amount) {
+  public TransactionResult sell(@NotNull Player p, @NotNull Shop shop, int entries) {
     return null;
   }
   /**
@@ -93,5 +93,33 @@ public class ItemShopStack implements ShopStack {
       return plugin.getItemMatcher().matches(this.item,(ItemStack)obj);
     }
     return false;
+  }
+
+  @Override
+  public int getEntriesPerStack() {
+    return this.itemsPerStack;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return Util.getItemStackName(this.item);
+  }
+
+  @Override
+  public String getSignName() {//For sign
+    String name = Util.getItemStackName(this.item);
+    if(name.length()>16){
+      StringBuilder builder = new StringBuilder();
+      String[] explode = name.split("\\.");
+      for (int i = 0; i <explode.length; i++) {
+        if(i+1 < explode.length){
+          builder.append(explode[i], 0, 1).append(".");
+        }else{
+          builder.append(explode[i]);
+        }
+      }
+      return builder.toString();
+    }
+    return name;
   }
 }

@@ -24,7 +24,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.UUID;
@@ -37,12 +36,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.maxgamer.quickshop.QuickShop;
@@ -50,7 +47,6 @@ import org.maxgamer.quickshop.event.ShopClickEvent;
 import org.maxgamer.quickshop.event.ShopDeleteEvent;
 import org.maxgamer.quickshop.event.ShopLoadEvent;
 import org.maxgamer.quickshop.event.ShopModeratorChangedEvent;
-import org.maxgamer.quickshop.event.ShopPriceChangeEvent;
 import org.maxgamer.quickshop.event.ShopUnloadEvent;
 import org.maxgamer.quickshop.event.ShopUpdateEvent;
 import org.maxgamer.quickshop.shop.shopstack.ShopStack;
@@ -144,7 +140,6 @@ public class ContainerShop implements Shop {
    * @param item The itemstack. The amount does not matter, just everything else
    * @param amount The amount to add to the shop.
    */
-  @Override
   public void add(@NotNull ItemStack item, int amount) {
     if (this.unlimited) {
       return;
@@ -179,16 +174,6 @@ public class ContainerShop implements Shop {
     return this.offeringStack.getFreeSpace(getInventory(),null);
   }
 
-  /**
-   * Returns true if the ItemStack matches what this shop is selling/buying
-   *
-   * @param item The ItemStack
-   * @return True if the ItemStack is the same (Excludes amounts)
-   */
-  @Override
-  public boolean  matches(@Nullable ItemStack item) {
-    return plugin.getItemMatcher().matches(this.item, item);
-  }
 
   /** @return The location of the shops chest */
   @Override
@@ -196,27 +181,6 @@ public class ContainerShop implements Shop {
     return this.location;
   }
 
-  /** @return The price per item this shop is selling */
-  @Override
-  public double getPrice() {
-    return this.price;
-  }
-  /**
-   * Sets the price of the shop.
-   *
-   * @param price The new price of the shop.
-   */
-  @Override
-  public void setPrice(double price) {
-    ShopPriceChangeEvent event = new ShopPriceChangeEvent(this, this.price, price);
-    if (Util.fireCancellableEvent(event)) {
-      Util.debugLog("A plugin cancelled the price change event.");
-      return;
-    }
-    this.price = price;
-    setSignText();
-    update();
-  }
 
   /** Upates the shop into the database. */
   @Override
@@ -255,12 +219,6 @@ public class ContainerShop implements Shop {
     }
   }
 
-  /** @return The durability of the item */
-  @Override
-  public short getDurability() {
-    return (short) ((Damageable) this.item.getItemMeta()).getDamage();
-  }
-
   @Override
   public @NotNull ShopStack getOfferingShopStack() {
     return null;
@@ -289,10 +247,10 @@ public class ContainerShop implements Shop {
     update();
   }
 
-  /** @return Returns a dummy itemstack of the item this shop is selling. */
+
   @Override
-  public @NotNull ItemStack getItem() {
-    return item;
+  public void add(@NotNull ShopStack paramShopStack, int servings) {
+
   }
 
   @Override
@@ -313,67 +271,7 @@ public class ContainerShop implements Shop {
    */
   @Override
   public void buy(@NotNull Player p, int amount) {
-    int amount1 = amount;
-    if (amount1 < 0) {
-      this.sell(p, -amount1);
-    }
-    amount1 = amount1 * stacks;
-    if (this.isUnlimited()) {
-      ItemStack[] contents = p.getInventory().getContents();
-      for (int i = 0; amount1 > 0 && i < contents.length; i++) {
-        ItemStack stack = contents[i];
-        if (stack == null || stack.getType() == Material.AIR) {
-          continue; // No item
-        }
-        if (matches(stack)) {
-          int stackSize = Math.min(amount1, stack.getAmount());
-          stack.setAmount(stack.getAmount() - stackSize);
-          amount1 -= stackSize;
-        }
-      }
-      // Send the players new inventory to them
-      p.getInventory().setContents(contents);
-      this.setSignText();
-      // This should not happen.
-      if (amount1 > 0) {
-        plugin
-            .getLogger()
-            .log(
-                Level.WARNING,
-                "Could not take all items from a players inventory on purchase! "
-                    + p.getName()
-                    + ", missing: "
-                    + amount1
-                    + ", item: "
-                    + Util.getItemStackName(this.getItem())
-                    + "!");
-      }
-    } else {
-      ItemStack[] playerContents = p.getInventory().getContents();
-      Inventory chestInv = this.getInventory();
-      for (int i = 0; amount1 > 0 && i < playerContents.length; i++) {
-        ItemStack item = playerContents[i];
-        if (item != null && this.matches(item)) {
-          // Copy it, we don't want to interfere
-          item = new ItemStack(item);
-          // Amount = total, item.getAmount() = how many items in the
-          // stack
-          int stackSize = Math.min(amount1, item.getAmount());
-          // If Amount is item.getAmount(), then this sets the amount
-          // to 0
-          // Else it sets it to the remainder
-          playerContents[i].setAmount(playerContents[i].getAmount() - stackSize);
-          // We can modify this, it is a copy.
-          item.setAmount(stackSize);
-          // Add the items to the players inventory
-          Objects.requireNonNull(chestInv).addItem(item);
-          amount1 -= stackSize;
-        }
-      }
-      // Now update the players inventory.
-      p.getInventory().setContents(playerContents);
-      this.setSignText();
-    }
+
   }
 
   @Override
@@ -486,18 +384,11 @@ public class ContainerShop implements Shop {
    * @param amount The amount to remove from the shop.
    */
   @Override
-  public void remove(@NotNull ItemStack item, int amount) {
+  public void remove(@NotNull ShopStack item, int amount) {
     if (this.unlimited) {
       return;
     }
-    Inventory inv = this.getInventory();
-    int remains = amount * stacks;
-    while (remains > 0) {
-      int stackSize = Math.min(remains, item.getMaxStackSize());
-      item.setAmount(stackSize);
-      Objects.requireNonNull(inv).removeItem(item);
-      remains -= stackSize;
-    }
+
     this.setSignText();
   }
 
@@ -530,47 +421,7 @@ public class ContainerShop implements Shop {
     if (amount < 0) {
       this.buy(p, -amount);
     }
-    amount = amount * stacks;
-    // Items to drop on floor
-    ArrayList<ItemStack> floor = new ArrayList<>(5);
-    Inventory pInv = p.getInventory();
-    if (this.isUnlimited()) {
-      ItemStack item = new ItemStack(this.item);
-      while (amount > 0) {
-        int stackSize = Math.min(amount, this.item.getMaxStackSize());
-        item.setAmount(stackSize);
-        pInv.addItem(item);
-        amount -= stackSize;
-      }
-    } else {
-      ItemStack[] chestContents = Objects.requireNonNull(this.getInventory()).getContents();
-      for (int i = 0; amount > 0 && i < chestContents.length; i++) {
-        // Can't clone it here, it could be null
-        ItemStack item = chestContents[i];
-        if (item != null && item.getType() != Material.AIR && this.matches(item)) {
-          // Copy it, we don't want to interfere
-          item = new ItemStack(item);
-          // Amount = total, item.getAmount() = how many items in the
-          // stack
-          int stackSize = Math.min(amount, item.getAmount());
-          // If Amount is item.getAmount(), then this sets the amount
-          // to 0
-          // Else it sets it to the remainder
-          chestContents[i].setAmount(chestContents[i].getAmount() - stackSize);
-          // We can modify this, it is a copy.
-          item.setAmount(stackSize);
-          // Add the items to the players inventory
-          floor.addAll(pInv.addItem(item).values());
-          amount -= stackSize;
-        }
-      }
-      // We now have to update the chests inventory manually.
-      this.getInventory().setContents(chestContents);
-      this.setSignText();
-    }
-    for (ItemStack stack : floor) {
-      p.getWorld().dropItem(p.getLocation(), stack);
-    }
+
   }
 
   /**
@@ -596,11 +447,6 @@ public class ContainerShop implements Shop {
   @Nullable
   public DisplayItem getDisplayItem() {
     return this.displayItem;
-  }
-
-  /** @return The enchantments the shop has on its items. */
-  public @NotNull Map<Enchantment, Integer> getEnchants() {
-    return Objects.requireNonNull(this.item.getItemMeta()).getEnchants();
   }
 
   /** @return The chest this shop is based on. */
@@ -631,12 +477,6 @@ public class ContainerShop implements Shop {
       return null;
     }
   }
-
-  /** @return The ItemStack type of this shop */
-  public @NotNull Material getMaterial() {
-    return this.item.getType();
-  }
-
   /**
    * Changes all lines of text on a sign near the shop
    *
@@ -683,6 +523,11 @@ public class ContainerShop implements Shop {
     this.shopType = shopType;
     this.setSignText();
     update();
+  }
+
+  @Override
+  public void setShopStack(@NotNull ShopStack shopStack, @NotNull ShopStackType type) {
+
   }
 
   @Override
@@ -830,6 +675,11 @@ public class ContainerShop implements Shop {
   @Override
   public boolean isAttached(@NotNull Block b) {
     return this.getLocation().getBlock().equals(Util.getAttached(b));
+  }
+
+  @Override
+  public boolean matches(@NotNull ShopStack shopStack, @NotNull ShopStackType shopStackType) {
+    return false;
   }
 
   /** Deletes the shop from the list of shops and queues it for database */
@@ -985,16 +835,6 @@ public class ContainerShop implements Shop {
   @Override
   public boolean isLoaded() {
     return this.isLoaded;
-  }
-
-  @Override
-  public int getStackAmount() {
-    return this.stacks;
-  }
-
-  @Override
-  public void setStackAmount(int amount) {
-    this.stacks = amount;
   }
 
 }

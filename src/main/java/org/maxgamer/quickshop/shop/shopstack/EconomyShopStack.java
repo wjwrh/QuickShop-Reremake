@@ -91,4 +91,19 @@ public class EconomyShopStack implements ShopStack {
     }
     return false;
   }
+
+  @Override
+  public int getEntriesPerStack() {
+    return 1;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return Util.format(this.moneyPerStack);
+  }
+
+  @Override
+  public String getSignName() {
+    return Util.format(this.moneyPerStack);
+  }
 }
