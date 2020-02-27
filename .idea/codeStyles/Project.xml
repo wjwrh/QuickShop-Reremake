@@ -9,12 +9,10 @@
           <package name="" withSubpackages="true" static="false" />
         </value>
       </option>
+      <option name="JD_ALIGN_PARAM_COMMENTS" value="false" />
+      <option name="JD_ALIGN_EXCEPTION_COMMENTS" value="false" />
     </JavaCodeStyleSettings>
     <codeStyleSettings language="JAVA">
-      <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
-      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
-      <option name="KEEP_BLANK_LINES_BETWEEN_PACKAGE_DECLARATION_AND_HEADER" value="1" />
-      <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="1" />
       <option name="IF_BRACE_FORCE" value="3" />
       <option name="DOWHILE_BRACE_FORCE" value="3" />
       <option name="WHILE_BRACE_FORCE" value="3" />
@@ -23,20 +21,6 @@
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
       </indentOptions>
       <arrangement>
-        <groups>
-          <group>
-            <type>GETTERS_AND_SETTERS</type>
-            <order>KEEP</order>
-          </group>
-          <group>
-            <type>OVERRIDDEN_METHODS</type>
-            <order>KEEP</order>
-          </group>
-          <group>
-            <type>DEPENDENT_METHODS</type>
-            <order>BREADTH_FIRST</order>
-          </group>
-        </groups>
         <rules>
           <section>
             <rule>
@@ -112,6 +96,7 @@
                 <AND>
                   <METHOD>true</METHOD>
                   <STATIC>true</STATIC>
+                  <visibility />
                 </AND>
               </match>
             </rule>
@@ -119,7 +104,10 @@
           <section>
             <rule>
               <match>
-                <METHOD>true</METHOD>
+                <AND>
+                  <METHOD>true</METHOD>
+                  <visibility />
+                </AND>
               </match>
             </rule>
           </section>
