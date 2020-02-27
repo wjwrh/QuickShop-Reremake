@@ -175,7 +175,6 @@
     </inspection_tool>
     <inspection_tool class="CollectionContainsUrl" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CollectionsFieldAccessReplaceableByMethodCall" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="CollectionsMustHaveInitialCapacity" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ComparableImplementedButEqualsNotOverridden" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ComparatorMethodParameterNotUsed" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ComparatorNotSerializable" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -244,6 +243,7 @@
       <option name="ignorableAnnotations">
         <value>
           <item value="com.jcabi.aspects.Immutable" />
+          <item value="lombok.Getter" />
         </value>
       </option>
       <option name="ignoreClassWithParameterization" value="false" />
@@ -304,7 +304,6 @@
     <inspection_tool class="FieldRepeatedlyAccessed" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_ignoreFinalFields" value="true" />
     </inspection_tool>
-    <inspection_tool class="FinalClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="FinalMethodInFinalClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="Finalize" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreTrivialFinalizers" value="true" />
@@ -734,7 +733,6 @@
       <option name="REPORT_NULLS_PASSED_TO_NON_ANNOTATED_METHOD" value="true" />
     </inspection_tool>
     <inspection_tool class="NumericToString" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ObjectAllocationInLoop" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ObjectEquality" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_ignoreEnums" value="true" />
       <option name="m_ignoreClassObjects" value="false" />
@@ -832,7 +830,6 @@
     <inspection_tool class="ReadObjectInitialization" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RecordStoreResource" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="RedundantFieldInitialization" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantImplements" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreSerializable" value="false" />
       <option name="ignoreCloneable" value="false" />
@@ -923,7 +920,6 @@
       <option name="m_ignorePrimitives" value="false" />
     </inspection_tool>
     <inspection_tool class="StringBufferField" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="StringBufferMustHaveInitialCapacity" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StringBufferReplaceableByString" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="StringBufferToStringInConcatenation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StringCompareTo" enabled="true" level="WARNING" enabled_by_default="true" />
