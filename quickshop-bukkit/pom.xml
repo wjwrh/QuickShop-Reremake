@@ -102,11 +102,6 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <artifactId>Database</artifactId>
-            <groupId>io.github.portlek</groupId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
             <artifactId>location</artifactId>
             <groupId>io.github.portlek</groupId>
             <version>1.5</version>
