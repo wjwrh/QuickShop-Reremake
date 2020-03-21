@@ -3,7 +3,7 @@ package org.maxgamer.quickshop;
 import java.util.Map;
 import java.util.WeakHashMap;
 import org.bukkit.Location;
-import org.maxgamer.quickshop.Shop.Shop;
+import org.maxgamer.quickshop.shop.Shop;
 
 public class Cache {
     private QuickShop plugin;
