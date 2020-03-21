@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-public class ShopProtectionCheckEvent extends QSEvent {
+public class ShopProtectionCheckEvent extends QuickShopEvent {
 
     @Getter
     @NotNull

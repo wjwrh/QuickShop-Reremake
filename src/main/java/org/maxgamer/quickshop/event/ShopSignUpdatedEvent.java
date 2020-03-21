@@ -27,7 +27,7 @@ import org.maxgamer.quickshop.shop.Shop;
 /**
  * Calling when shop sign update, Can't cancel
  */
-public class ShopSignUpdatedEvent extends QSEvent {
+public class ShopSignUpdatedEvent extends QuickShopEvent {
 
     @Getter
     @NotNull

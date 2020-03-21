@@ -30,7 +30,7 @@ import org.maxgamer.quickshop.shop.Shop;
 /**
  * This event is called after DisplayItem removed
  */
-public class ShopDisplayItemDespawnEvent extends QSEvent implements Cancellable {
+public class ShopDisplayItemDespawnEvent extends QuickShopEvent implements Cancellable {
 
     @Getter
     @NotNull

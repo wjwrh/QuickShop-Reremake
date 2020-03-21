@@ -30,7 +30,7 @@ import org.maxgamer.quickshop.shop.Shop;
 /**
  * This event is called before the shop display item created
  */
-public class ShopDisplayItemSpawnEvent extends QSEvent implements Cancellable {
+public class ShopDisplayItemSpawnEvent extends QuickShopEvent implements Cancellable {
 
     @Getter
     @NotNull

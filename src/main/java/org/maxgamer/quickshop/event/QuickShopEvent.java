@@ -1,5 +1,5 @@
 /*
- * This file is a part of project QuickShop, the name is QSEvent.java
+ * This file is a part of project QuickShop, the name is QuickShopEvent.java
  * Copyright (C) Ghost_chu <https://github.com/Ghost-chu>
  * Copyright (C) Bukkit Commons Studio and contributors
  *
@@ -23,7 +23,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class QSEvent extends Event {
+public abstract class QuickShopEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 

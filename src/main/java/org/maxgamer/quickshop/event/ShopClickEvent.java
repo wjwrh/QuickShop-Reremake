@@ -24,7 +24,7 @@ import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 import org.maxgamer.quickshop.shop.Shop;
 
-public class ShopClickEvent extends QSEvent implements Cancellable {
+public class ShopClickEvent extends QuickShopEvent implements Cancellable {
 
     @NotNull
     @Getter

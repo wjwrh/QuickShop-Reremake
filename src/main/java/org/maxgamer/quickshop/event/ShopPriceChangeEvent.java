@@ -27,7 +27,7 @@ import org.maxgamer.quickshop.shop.Shop;
 /**
  * Calling when shop price was changed, Can't cancel
  */
-public class ShopPriceChangeEvent extends QSEvent implements Cancellable {
+public class ShopPriceChangeEvent extends QuickShopEvent implements Cancellable {
 
     @Getter
     private final double newPrice;

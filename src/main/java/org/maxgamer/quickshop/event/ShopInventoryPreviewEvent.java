@@ -25,7 +25,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ShopInventoryPreviewEvent extends QSEvent implements Cancellable {
+public class ShopInventoryPreviewEvent extends QuickShopEvent implements Cancellable {
 
     @Getter
     @NotNull
