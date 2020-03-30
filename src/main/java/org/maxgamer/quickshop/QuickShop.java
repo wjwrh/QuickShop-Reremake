@@ -345,8 +345,8 @@ public class QuickShop extends JavaPlugin {
             //VirtualItem support
             if (DisplayItem.getNowUsing() == DisplayType.VIRTUALITEM) {
                 getLogger().info("Using Virtual item Display, loading ProtocolLib support...");
-                Plugin protocolLibPlugin=Bukkit.getPluginManager().getPlugin("ProtocolLib");
-                if (protocolLibPlugin != null&&protocolLibPlugin.isEnabled()) {
+                Plugin protocolLibPlugin = Bukkit.getPluginManager().getPlugin("ProtocolLib");
+                if (protocolLibPlugin != null && protocolLibPlugin.isEnabled()) {
                     getLogger().info("Successfully loaded ProtocolLib support!");
                 } else {
                     getLogger().warning("Failed to load ProtocolLib support, fallback to real item display");
@@ -687,12 +687,12 @@ public class QuickShop extends JavaPlugin {
 
         customInventoryListener = new CustomInventoryListener(this);
 
-        shopProtectListener = new ShopProtectionListener(this);
+        shopProtectListener = new ShopProtectionListener(this, this.shopCache);
 
         syncTaskWatcher = new SyncTaskWatcher(this);
         // shopVaildWatcher = new ShopVaildWatcher(this);
         ongoingFeeWatcher = new OngoingFeeWatcher(this);
-        lockListener = new LockListener(this);
+        lockListener = new LockListener(this, this.shopCache);
         internalListener = new InternalListener(this);
 
         Bukkit.getPluginManager().registerEvents(blockListener, this);
@@ -1531,10 +1531,10 @@ public class QuickShop extends JavaPlugin {
             getConfig().set("config-version", 90);
             selectedVersion = 90;
         }
-        if(selectedVersion==90){
-            getConfig().set("protect.hopper",true);
+        if (selectedVersion == 90) {
+            getConfig().set("protect.hopper", true);
             getConfig().set("config-version", 91);
-            selectedVersion=91;
+            selectedVersion = 91;
         }
         saveConfig();
         reloadConfig();
