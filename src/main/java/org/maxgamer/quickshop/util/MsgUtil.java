@@ -19,16 +19,6 @@
 
 package org.maxgamer.quickshop.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.logging.Level;
 import lombok.SneakyThrows;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -58,9 +48,20 @@ import org.maxgamer.quickshop.fileportlek.old.IFile;
 import org.maxgamer.quickshop.fileportlek.old.JSONFile;
 import org.maxgamer.quickshop.shop.Shop;
 
-@SuppressWarnings("WeakerAccess")
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+
+
 public class MsgUtil {
-    public static final String invaildMsg = "Invaild message";
+    private static final String invaildMsg = "Invaild message";
 
     private static final HashMap<UUID, LinkedList<String>> player_messages = new HashMap<>();
 
@@ -990,6 +991,7 @@ public class MsgUtil {
         return messagei18n;
     }
 
+    @SneakyThrows
     @SuppressWarnings("UnusedAssignment")
     private static void updateMessages(int selectedVersion) {
         String languageName = plugin.getConfig().getString("language", "en");
@@ -1323,8 +1325,14 @@ public class MsgUtil {
             setAndUpdate("language-version", 29);
             selectedVersion = 29;
         }
+        if (selectedVersion == 29) {
+            setAndUpdate("3rd-plugin-build-check-failed", "Some 3rd party plugin denied the permission checks, did you have permission built in there?");
+            setAndUpdate("language-version", 30);
+            selectedVersion = 30;
+        }
 
         messagei18n.save();
+        messagei18n.loadFromString(Util.parseColours(messagei18n.saveToString()));
     }
 
     private static void setAndUpdate(@NotNull String path, @Nullable Object object) {
