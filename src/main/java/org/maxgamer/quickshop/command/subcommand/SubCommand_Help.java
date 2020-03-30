@@ -19,8 +19,6 @@
 
 package org.maxgamer.quickshop.command.subcommand;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +26,9 @@ import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.command.CommandContainer;
 import org.maxgamer.quickshop.command.CommandProcesser;
 import org.maxgamer.quickshop.util.MsgUtil;
+
+import java.util.Collections;
+import java.util.List;
 
 public class SubCommand_Help implements CommandProcesser {
 
@@ -43,40 +44,30 @@ public class SubCommand_Help implements CommandProcesser {
     @Override
     public List<String> onTabComplete(
         @NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] cmdArg) {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     private void sendHelp(@NotNull CommandSender s, @NotNull String commandLabel) {
         s.sendMessage(MsgUtil.getMessage("command.description.title", s));
-
+        commandCheckLoop:
         for (CommandContainer container : plugin.getCommandManager().getCmds()) {
             final List<String> requirePermissions = container.getPermissions();
-
-            if (requirePermissions != null && !requirePermissions.isEmpty()) {
+            if (!container.isHidden()&&requirePermissions != null && !requirePermissions.isEmpty()) {
                 for (String requirePermission : requirePermissions) {
-                    // FIXME: 24/11/2019 You are already checked the null and empty
-                    if (requirePermission != null
-                        && !requirePermission.isEmpty()
-                        && !QuickShop.getPermissionManager().hasPermission(s, requirePermission)) {
-                        //noinspection UnnecessaryContinue
-                        continue;
+                    if (requirePermission!=null&&!QuickShop.getPermissionManager().hasPermission(s, requirePermission)) {
+                        continue commandCheckLoop;
                     }
                 }
+                s.sendMessage(
+                        ChatColor.GREEN
+                                + "/"
+                                + commandLabel
+                                + " "
+                                + container.getPrefix()
+                                + ChatColor.YELLOW
+                                + " - "
+                                + MsgUtil.getMessage("command.description." + container.getPrefix(), s));
             }
-
-            if (container.isHidden()) {
-                continue;
-            }
-
-            s.sendMessage(
-                ChatColor.GREEN
-                    + "/"
-                    + commandLabel
-                    + " "
-                    + container.getPrefix()
-                    + ChatColor.YELLOW
-                    + " - "
-                    + MsgUtil.getMessage("command.description." + container.getPrefix(), s));
         }
     }
 

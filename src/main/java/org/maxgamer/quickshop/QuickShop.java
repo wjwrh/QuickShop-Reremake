@@ -19,16 +19,11 @@
 
 package org.maxgamer.quickshop;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.Map.Entry;
 import lombok.Getter;
 import me.minebuilders.clearlag.Clearlag;
 import me.minebuilders.clearlag.listeners.ItemMergeListener;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -60,6 +55,13 @@ import org.maxgamer.quickshop.util.logger.QuickShopLogger;
 import org.maxgamer.quickshop.util.serverforkwrapper.BukkitAPIWrapper;
 import org.maxgamer.quickshop.util.serverforkwrapper.SpigotWrapper;
 import org.maxgamer.quickshop.watcher.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 public class QuickShop extends JavaPlugin {
@@ -619,6 +621,9 @@ public class QuickShop extends JavaPlugin {
         MsgUtil.loadEnchi18n();
         MsgUtil.loadPotioni18n();
         this.previewProtectionLore = MsgUtil.getMessageOfflinePlayer("quickshop-gui-preview", null);
+        if (this.previewProtectionLore == null || this.previewProtectionLore.isEmpty()) {
+            this.previewProtectionLore = ChatColor.RED + "FIXME: DON'T SET THIS TO EMPTY STRING";
+        }
 
 
         /* Load 3rd party supports */
@@ -754,15 +759,6 @@ public class QuickShop extends JavaPlugin {
             }
         } catch (Throwable ignore) {
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                List<String> debugLogs = Util.getDebugLogs();
-                while (debugLogs.size() > 2000) {
-                    debugLogs.remove(debugLogs.size() - 1);
-                }
-            }
-        }.runTaskTimerAsynchronously(this, 0, 20 * 60 * 60);
     }
 
     private void registerIntegrations() {
