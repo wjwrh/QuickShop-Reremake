@@ -19,6 +19,12 @@
 
 package org.maxgamer.quickshop;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.Map.Entry;
 import lombok.Getter;
 import me.minebuilders.clearlag.Clearlag;
 import me.minebuilders.clearlag.listeners.ItemMergeListener;
@@ -45,8 +51,8 @@ import org.maxgamer.quickshop.integration.PlotSquared.PlotSquaredIntegration;
 import org.maxgamer.quickshop.integration.Residence.ResidenceIntegration;
 import org.maxgamer.quickshop.integration.Towny.TownyIntegration;
 import org.maxgamer.quickshop.integration.WorldGuard.WorldGuardIntegration;
-import org.maxgamer.quickshop.internalistener.InternalListener;
 import org.maxgamer.quickshop.listener.*;
+import org.maxgamer.quickshop.listener.internal.InternalListener;
 import org.maxgamer.quickshop.permission.PermissionManager;
 import org.maxgamer.quickshop.shop.*;
 import org.maxgamer.quickshop.util.Timer;
@@ -55,13 +61,6 @@ import org.maxgamer.quickshop.util.logger.QuickShopLogger;
 import org.maxgamer.quickshop.util.serverforkwrapper.BukkitAPIWrapper;
 import org.maxgamer.quickshop.util.serverforkwrapper.SpigotWrapper;
 import org.maxgamer.quickshop.watcher.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.Map.Entry;
 
 
 public class QuickShop extends JavaPlugin {
@@ -661,7 +660,11 @@ public class QuickShop extends JavaPlugin {
             getLogger().severe("Shop.find-distance is too high! It may cause lag! Pick a number under 100!");
         }
 
-        this.shopCache = new Cache(this);
+        if (getConfig().getBoolean("use-caching")) {
+            this.shopCache = new Cache(this);
+        } else {
+            this.shopCache = null;
+        }
 
         signUpdateWatcher = new SignUpdateWatcher(this);
         shopContainerWatcher = new ShopContainerWatcher(this);
@@ -676,7 +679,7 @@ public class QuickShop extends JavaPlugin {
         getLogger().info("Registering Listeners...");
         // Register events
 
-        blockListener = new BlockListener(this);
+        blockListener = new BlockListener(this, this.shopCache);
         playerListener = new PlayerListener(this);
         worldListener = new WorldListener(this);
         chatListener = new ChatListener(this);
